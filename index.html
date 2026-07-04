@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pesquisador Aumentado™ — Método socrático para orientadores de TCC</title>
+<meta name="description" content="Metodologia aplicada para professores orientadores: use IA como interlocutor socrático — uma ferramenta que questiona o aluno e o obriga a pensar, em vez de responder por ele.">
+<style>
+  /* ============================================================
+     DESIGN TOKENS — Pesquisador Aumentado
+     Direção: autoridade acadêmica sóbria (anti-hype)
+     Paleta: papel quente + tinta grafite-navy + acento bordô
+     Tipografia: serifa editorial p/ leitura longa (sem CDN)
+     ============================================================ */
+  :root {
+    /* Cores */
+    --paper:        #f6f2ea;   /* fundo papel quente */
+    --paper-card:   #fbf8f2;   /* blocos elevados */
+    --ink:          #1b2330;   /* tinta principal */
+    --ink-soft:     #3a4453;   /* corpo de texto */
+    --muted:        #6a7280;   /* texto secundário */
+    --rule:         #ddd4c5;   /* filetes / bordas */
+    --accent:       #7a2e2e;   /* bordô acadêmico */
+    --accent-deep:  #5e2222;   /* bordô hover */
+    --ochre:        #9a6b2f;   /* destaque secundário */
+    --paper-dark:   #eae3d6;   /* faixas alternadas */
+
+    /* Escala tipográfica */
+    --serif: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Times New Roman', serif;
+    --sans:  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+    /* Espaçamento */
+    --measure: 34rem;   /* largura ideal de leitura */
+    --gap-section: 4.5rem;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink-soft);
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    line-height: 1.72;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ---------- Estrutura ---------- */
+  .wrap {
+    max-width: var(--measure);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  section { padding: var(--gap-section) 0; }
+  .band { background: var(--paper-dark); }
+  .band-ink {
+    background: var(--ink);
+    color: #e8e3d8;
+  }
+
+  /* ---------- Tipografia ---------- */
+  h1, h2, h3 {
+    font-family: var(--serif);
+    color: var(--ink);
+    line-height: 1.18;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  h2 {
+    font-size: 1.85rem;
+    margin-bottom: 1.4rem;
+  }
+  h3 {
+    font-size: 1.2rem;
+    margin-bottom: .6rem;
+    color: var(--accent);
+  }
+  p { margin-bottom: 1.15rem; }
+  p:last-child { margin-bottom: 0; }
+  strong { color: var(--ink); font-weight: 700; }
+  em { font-style: italic; }
+
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: .75rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 1.4rem;
+    display: block;
+  }
+  .band-ink .eyebrow { color: var(--ochre); }
+
+  /* filete decorativo acadêmico */
+  .rule-mark {
+    width: 3rem;
+    height: 2px;
+    background: var(--accent);
+    margin: 0 0 1.6rem;
+  }
+  .rule-center { margin-left: auto; margin-right: auto; }
+
+  /* ---------- Header / above the fold ---------- */
+  .masthead {
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper);
+  }
+  .masthead-inner {
+    max-width: 62rem;
+    margin: 0 auto;
+    padding: 1.1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .wordmark {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .wordmark span { color: var(--accent); }
+  .masthead-note {
+    font-family: var(--sans);
+    font-size: .72rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .hero {
+    padding: 5rem 0 4.2rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .hero .wrap { max-width: 44rem; }
+  .hero h1 {
+    font-size: 2.55rem;
+    line-height: 1.16;
+    margin-bottom: 1.6rem;
+  }
+  .hero .lede {
+    font-size: 1.28rem;
+    color: var(--ink-soft);
+    border-left: 3px solid var(--accent);
+    padding-left: 1.2rem;
+    font-style: italic;
+  }
+  .subhead {
+    font-family: var(--sans);
+    font-size: 1.02rem;
+    line-height: 1.6;
+    color: var(--muted);
+    margin-top: 2rem;
+    max-width: 38rem;
+  }
+
+  /* ---------- CTA ---------- */
+  .cta-block {
+    text-align: center;
+    padding: 3.4rem 0;
+  }
+  .btn {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 1.08rem;
+    font-weight: 600;
+    letter-spacing: .01em;
+    color: #fbf8f2;
+    background: var(--accent);
+    padding: 1.05rem 2.2rem;
+    border-radius: 3px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background .18s ease, transform .18s ease;
+    box-shadow: 0 2px 0 var(--accent-deep);
+  }
+  .btn:hover { background: var(--accent-deep); transform: translateY(-1px); }
+  .cta-sub {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--muted);
+    margin-top: 1.2rem;
+  }
+  .cta-note {
+    font-family: var(--sans);
+    font-size: .82rem;
+    color: var(--muted);
+    margin-top: .9rem;
+    letter-spacing: .02em;
+  }
+
+  /* ---------- Listas de conteúdo ---------- */
+  .parts { list-style: none; margin-top: .5rem; }
+  .parts li {
+    padding: 1.3rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .parts li:last-child { border-bottom: none; }
+  .parts .part-label {
+    font-family: var(--sans);
+    font-size: .72rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    font-weight: 600;
+    display: block;
+    margin-bottom: .35rem;
+  }
+  .parts .part-title {
+    font-family: var(--serif);
+    font-weight: 700;
+    color: var(--ink);
+    font-size: 1.15rem;
+    display: block;
+    margin-bottom: .4rem;
+  }
+  .parts p { font-size: 1.02rem; margin-bottom: 0; color: var(--ink-soft); }
+
+  /* ---------- Colunas para-quem / não-é ---------- */
+  .audience {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.4rem;
+  }
+  .audience h3 { margin-bottom: 1rem; }
+  .audience ul { list-style: none; }
+  .audience li {
+    position: relative;
+    padding-left: 1.6rem;
+    margin-bottom: .85rem;
+    font-size: 1.02rem;
+    line-height: 1.55;
+  }
+  .audience .is li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .audience .isnot li::before {
+    content: "×";
+    position: absolute;
+    left: 0;
+    color: var(--muted);
+    font-weight: 700;
+  }
+  .audience .isnot h3 { color: var(--muted); }
+
+  /* ---------- Ética (bloco destaque) ---------- */
+  .ethics blockquote {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--ink);
+    border-left: 3px solid var(--ochre);
+    padding: .2rem 0 .2rem 1.3rem;
+    margin: 1.6rem 0;
+  }
+
+  /* ---------- Preço ---------- */
+  .price-card {
+    background: var(--paper-card);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 2.6rem 2rem;
+    text-align: center;
+    max-width: 34rem;
+    margin: 0 auto;
+    box-shadow: 0 1px 0 rgba(0,0,0,.03);
+  }
+  .price-amount {
+    font-family: var(--serif);
+    font-size: 3.2rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .price-amount span {
+    font-size: 1.2rem;
+    color: var(--muted);
+    vertical-align: super;
+  }
+  .price-card p { font-size: 1.02rem; color: var(--ink-soft); }
+  .price-card .fine { color: var(--muted); font-size: .95rem; }
+
+  .guarantee {
+    max-width: 34rem;
+    margin: 2rem auto 0;
+    border: 1px dashed var(--rule);
+    border-radius: 4px;
+    padding: 1.6rem 1.8rem;
+    background: transparent;
+  }
+  .guarantee h3 { font-size: 1.05rem; margin-bottom: .5rem; }
+  .guarantee p { font-size: .98rem; margin-bottom: .6rem; }
+
+  /* ---------- Frase de assinatura ---------- */
+  .signature {
+    text-align: center;
+    padding: 3rem 0;
+  }
+  .signature blockquote {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.35rem;
+    line-height: 1.5;
+    color: #e8e3d8;
+    max-width: 40rem;
+    margin: 0 auto;
+  }
+  .signature cite {
+    display: block;
+    font-style: normal;
+    font-family: var(--sans);
+    font-size: .82rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-top: 1.4rem;
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    border-top: 1px solid var(--rule);
+    padding: 2.4rem 0;
+    text-align: center;
+  }
+  footer p {
+    font-family: var(--sans);
+    font-size: .82rem;
+    color: var(--muted);
+    letter-spacing: .02em;
+  }
+
+  /* ---------- Responsivo ---------- */
+  @media (max-width: 640px) {
+    body { font-size: 1.08rem; }
+    .hero h1 { font-size: 1.95rem; }
+    .hero .lede { font-size: 1.12rem; }
+    h2 { font-size: 1.5rem; }
+    .audience { grid-template-columns: 1fr; gap: 2rem; }
+    .signature blockquote { font-size: 1.15rem; }
+    .price-amount { font-size: 2.6rem; }
+    .masthead-note { display: none; }
+    :root { --gap-section: 3.4rem; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============ MASTHEAD ============ -->
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="wordmark">Pesquisador Aumentado<span>™</span></div>
+      <div class="masthead-note">Metodologia aplicada · Orientação de TCC</div>
+    </div>
+  </header>
+
+  <!-- ============ HERO (above the fold) ============ -->
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow">Para professores orientadores</span>
+      <h1>Você passou anos aprendendo a fazer as perguntas certas. Agora existe um método para ensinar seus alunos a fazê-las — antes de chegar na sua sala.</h1>
+      <p class="lede">Para professores orientadores que estão cansados de corrigir texto quando deveriam estar orientando pesquisa.</p>
+      <p class="subhead">Uma metodologia aplicada que usa IA como interlocutor socrático — uma ferramenta que questiona o aluno e o obriga a pensar, em vez de responder por ele.</p>
+    </div>
+  </section>
+
+  <!-- ============ ABERTURA + AGITAÇÃO ============ -->
+  <section>
+    <div class="wrap">
+      <span class="eyebrow">A dor, nomeada com precisão</span>
+      <div class="rule-mark"></div>
+      <p>Você não virou professor para revisar parágrafo copiado do Google.</p>
+      <p>Você entrou na academia porque sabia fazer perguntas que incomodavam. Porque enxergava lacunas onde outros viam certezas. Porque a pesquisa, para você, sempre foi um exercício socrático — de dúvida metódica, não de respostas prontas.</p>
+      <p>Mas alguma coisa aconteceu no caminho.</p>
+      <p>A orientação de TCC virou uma fila de e-mails sem resposta, reuniões para corrigir o que deveria ter sido feito, e bancas onde você segura o resultado de decisões que não foram suas.</p>
+      <p>Seis alunos por semestre. Cada um com um prazo diferente, um nível diferente, e a mesma ausência de método.</p>
+      <p>Você não está sobrecarregado por falta de competência. Está sobrecarregado porque o processo foi desenhado para consumir orientadores, não para formá-los.</p>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <span class="eyebrow">O que ninguém fala em voz alta</span>
+      <div class="rule-mark"></div>
+      <p>Vamos nomear o que acontece de verdade:</p>
+      <p>O aluno chega com respostas. Rasas, copiadas, formatadas para parecer que ele trabalhou. Você devolve com perguntas. Ele desaparece por três semanas. Volta com as mesmas respostas, ligeiramente reorganizadas.</p>
+      <p>A culpa, quando o TCC vai mal, recai sobre você. Não formalmente — a instituição tem protocolos para isso. Mas nos corredores, nas reuniões de colegiado, na avaliação que ninguém mostra mas todos sentem, o orientador é o responsável pelo que o aluno não entregou.</p>
+      <p>E a IA chegou para complicar ainda mais. Seus colegas estão curiosos, mas com medo. Usar IA na orientação parece, à primeira vista, cumplicidade com a mediocridade do aluno. Como se adotar uma ferramenta nova fosse trair vinte anos de rigor acadêmico.</p>
+      <p>O resultado: você continua fazendo tudo no WhatsApp, corrigindo o que não deveria corrigir, e sentindo que a orientação — que deveria ser a parte mais intelectualmente rica do seu trabalho — virou o maior dreno da sua semana.</p>
+    </div>
+  </section>
+
+  <!-- ============ CTA 1 ============ -->
+  <section class="cta-block">
+    <div class="wrap">
+      <a href="#investimento" class="btn">Quero orientar pesquisa — não corrigir texto</a>
+      <p class="cta-sub">Você já tem o método. Este e-book te dá o sistema.</p>
+    </div>
+  </section>
+
+  <!-- ============ VIRADA ============ -->
+  <section>
+    <div class="wrap">
+      <span class="eyebrow">O que você já sabe, mas não tinha sistematizado</span>
+      <div class="rule-mark"></div>
+      <p>Aqui está o que é verdade sobre você:</p>
+      <p><strong>Você já pensa de forma socrática. Sempre pensou.</strong></p>
+      <p>Quando orienta bem, você não dá respostas — você faz perguntas que obrigam o aluno a pensar. Você cria desconforto produtivo. Você não corrige o texto, você questiona a premissa.</p>
+      <p>O problema não é o seu método. É que esse método não escala para seis alunos simultâneos com níveis diferentes, sem nenhuma estrutura de suporte entre uma sessão e outra.</p>
+      <p>O <strong>Pesquisador Aumentado™</strong> é a sistematização desse método que você já tem — com IA como multiplicador socrático, não como substituto do pensamento.</p>
+      <p>Não é sobre fazer o trabalho pelo aluno. É sobre criar um protocolo que faz o aluno trabalhar antes de chegar até você — com perguntas reais, não com respostas vazias.</p>
+    </div>
+  </section>
+
+  <!-- ============ O QUE É ============ -->
+  <section class="band">
+    <div class="wrap">
+      <span class="eyebrow">O que é — sem enrolação</span>
+      <div class="rule-mark"></div>
+      <p><strong>Pesquisador Aumentado™</strong> é um e-book de metodologia aplicada com um único objetivo: transformar suas orientações de sessões corretivas em diálogos de pesquisa.</p>
+      <p>Você vai aprender a usar IA como ferramenta socrática — um interlocutor que questiona o aluno, aponta inconsistências, e exige que ele defenda suas escolhas metodológicas antes de chegar até você.</p>
+      <p><strong>Não é teoria. É protocolo.</strong></p>
+      <p>Você lê, aplica na próxima orientação, e já percebe a diferença.</p>
+    </div>
+  </section>
+
+  <!-- ============ O QUE ESTÁ DENTRO ============ -->
+  <section>
+    <div class="wrap">
+      <span class="eyebrow">O que está dentro</span>
+      <div class="rule-mark"></div>
+      <ul class="parts">
+        <li>
+          <span class="part-label">Parte 1</span>
+          <span class="part-title">O Problema Estrutural</span>
+          <p>Por que a orientação de TCC no Brasil foi desenhada para falhar — e o que isso tem a ver com ausência de método socrático no processo.</p>
+        </li>
+        <li>
+          <span class="part-label">Parte 2</span>
+          <span class="part-title">Metodologia Socrática Aplicada à Orientação</span>
+          <p>Os 4 tipos de perguntas que transformam aluno passivo em pesquisador ativo. Com exemplos reais de sessões de orientação.</p>
+        </li>
+        <li>
+          <span class="part-label">Parte 3</span>
+          <span class="part-title">IA como Interlocutor Socrático</span>
+          <p>Como configurar prompts que funcionam como um orientador intermediário — que faz o aluno pensar antes de te enviar qualquer coisa. Ética, autoria e rigor: o que a metodologia garante e por quê.</p>
+        </li>
+        <li>
+          <span class="part-label">Parte 4</span>
+          <span class="part-title">Protocolo de Orientação em 3 Camadas</span>
+          <p>O sistema que reduz suas reuniões corretivas em até 60% sem reduzir a qualidade da orientação — e protege sua reputação na banca.</p>
+        </li>
+        <li>
+          <span class="part-label">Parte 5</span>
+          <span class="part-title">Implementação Imediata</span>
+          <p>Templates de perguntas socráticas por fase do TCC. Pronto para usar na próxima semana.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ PARA QUEM É / NÃO É ============ -->
+  <section class="band">
+    <div class="wrap">
+      <span class="eyebrow">Antes de decidir</span>
+      <div class="rule-mark"></div>
+      <div class="audience">
+        <div class="is">
+          <h3>Para quem é</h3>
+          <ul>
+            <li>Orienta TCCs em universidade federal ou estadual brasileira</li>
+            <li>Está cansado de ser revisor de texto em vez de orientador de pesquisa</li>
+            <li>Tem curiosidade sobre IA mas quer usar com método e ética clara</li>
+            <li>Quer recuperar o tempo — e o prazer intelectual — que a orientação deveria te dar</li>
+          </ul>
+        </div>
+        <div class="isnot">
+          <h3>Para quem não é</h3>
+          <ul>
+            <li>Quem quer automatizar a orientação e se desresponsabilizar do processo</li>
+            <li>Quem busca um atalho para o aluno — este método exige mais do aluno, não menos</li>
+            <li>Quem não orienta TCC ativamente</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ÉTICA (antes do preço) ============ -->
+  <section class="ethics">
+    <div class="wrap">
+      <span class="eyebrow">Sobre a ética — porque você vai perguntar</span>
+      <div class="rule-mark"></div>
+      <p>A primeira dúvida de todo orientador sério é esta: <em>"Usar IA não vai fazer o trabalho pelo aluno?"</em></p>
+      <p>A resposta curta: <strong>não — se você usar da forma certa.</strong></p>
+      <p>A resposta completa está dentro do e-book. Mas aqui vai o princípio central da metodologia:</p>
+      <blockquote>IA socrática não escreve pelo aluno. Ela questiona o aluno até que ele precise pensar por conta própria.</blockquote>
+      <p>Um bom prompt socrático não dá a resposta. Ele pergunta: <em>"Qual é a sua justificativa metodológica para essa escolha?"</em> — e fica em silêncio até o aluno responder.</p>
+      <p>É a diferença entre um ghostwriter e um orientador.</p>
+      <p>Você já sabe essa diferença. Agora vai ter o protocolo para aplicá-la em escala.</p>
+    </div>
+  </section>
+
+  <!-- ============ INVESTIMENTO + GARANTIA + CTA FINAL ============ -->
+  <section class="band" id="investimento">
+    <div class="wrap" style="max-width:40rem;">
+      <span class="eyebrow rule-center" style="text-align:center;">Investimento</span>
+      <div class="rule-mark rule-center"></div>
+
+      <div class="price-card">
+        <div class="price-amount"><span>R$</span> 127</div>
+        <p style="margin-top:1.2rem;">Para um professor que orienta 6 TCCs por semestre, isso representa menos de <strong>R$ 22 por aluno orientado</strong>.</p>
+        <p class="fine">Se a metodologia poupar duas horas de reuniões corretivas por aluno — e ela vai poupar mais do que isso — o retorno acontece na primeira semana de uso.</p>
+      </div>
+
+      <div class="guarantee">
+        <h3>Garantia de 7 dias, incondicional</h3>
+        <p>Se você ler, aplicar na próxima orientação, e sentir que não valeu o investimento — devolvo 100% do valor sem perguntas.</p>
+        <p style="margin-bottom:0;">Não porque o material é fraco. Mas porque orientador sério não compra no escuro.</p>
+      </div>
+
+      <div class="cta-block" style="padding-bottom:0;">
+        <a href="#" class="btn">Quero orientar pesquisa — não corrigir texto</a>
+        <p class="cta-note">Acesso imediato após a confirmação do pagamento.</p>
+        <p class="cta-sub">Você já tem o método. Este e-book te dá o sistema.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ASSINATURA ============ -->
+  <section class="band-ink signature">
+    <div class="wrap" style="max-width:44rem;">
+      <blockquote>
+        Você já tem o método. Agora vai ter o sistema para aplicá-lo em escala — sem trair o rigor que te trouxe até aqui.
+      </blockquote>
+      <cite>Pesquisador Aumentado™</cite>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="wrap" style="max-width:44rem;">
+      <p>Pesquisador Aumentado™ — Metodologia aplicada para orientadores de TCC. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
