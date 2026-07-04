@@ -8,29 +8,52 @@
 <style>
   /* ============================================================
      DESIGN TOKENS — Pesquisador Aumentado
-     Direção: autoridade acadêmica sóbria (anti-hype)
-     Paleta: papel quente + tinta grafite-navy + acento bordô
-     Tipografia: serifa editorial p/ leitura longa (sem CDN)
+     Direção: produto de IA sério e sereno (anti-hype)
+     Paleta: creme quente + tinta quase-preta + acento terracota
+     Tipografia: sans humanista p/ corpo; serif só em destaque pontual
+     Standalone — sem CDN externo
      ============================================================ */
   :root {
-    /* Cores */
-    --paper:        #f6f2ea;   /* fundo papel quente */
-    --paper-card:   #fbf8f2;   /* blocos elevados */
-    --ink:          #1b2330;   /* tinta principal */
-    --ink-soft:     #3a4453;   /* corpo de texto */
-    --muted:        #6a7280;   /* texto secundário */
-    --rule:         #ddd4c5;   /* filetes / bordas */
-    --accent:       #7a2e2e;   /* bordô acadêmico */
-    --accent-deep:  #5e2222;   /* bordô hover */
-    --ochre:        #9a6b2f;   /* destaque secundário */
-    --paper-dark:   #eae3d6;   /* faixas alternadas */
+    /* Cores — superfícies */
+    --canvas:        #faf9f5;   /* fundo raiz — creme quente */
+    --card:          #ffffff;   /* superfície de card/preview */
+    --secondary-bg:  #f0eee6;   /* fundo de faixa / botão secundário */
 
-    /* Escala tipográfica */
-    --serif: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Times New Roman', serif;
-    --sans:  -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    /* Cores — tinta */
+    --primary:       #141413;   /* ação primária, ênfase, superfície escura */
+    --primary-fg:    #faf9f5;   /* texto sobre primary */
+    --foreground:    #141413;   /* texto primário */
+    --fg-muted:      #5e5d59;   /* texto secundário */
 
-    /* Espaçamento */
-    --measure: 34rem;   /* largura ideal de leitura */
+    /* Cores — contorno + acento */
+    --border:        rgba(20,20,19,0.10);  /* filete/divisor — preto 10% */
+    --border-strong: rgba(20,20,19,0.18);
+    --ring:          #d97757;   /* foco de teclado + acento terracota pontual */
+    --destructive:   #C6613F;
+
+    /* Estados */
+    --state-hover:   rgba(0,0,0,0.08);
+    --state-focus:   rgba(0,0,0,0.12);
+    --state-pressed: rgba(0,0,0,0.16);
+
+    /* Tipografia */
+    --font-display: system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --font-body:    system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --font-mono:    ui-monospace, "SF Mono", "Roboto Mono", "JetBrains Mono", "Consolas", monospace;
+    --font-serif:   "Iowan Old Style", "Palatino Linotype", Georgia, "Times New Roman", serif;
+
+    /* Raios */
+    --radius-button: 4px;
+    --radius-input:  4px;
+    --radius-card:   8px;
+    --radius-pill:   9999px;
+
+    /* Dimensões */
+    --btn-height:  2.5rem;   /* 40px — alvo mínimo de toque */
+    --nav-height:  64px;
+
+    /* Layout */
+    --measure: 34rem;
     --gap-section: 4.5rem;
   }
 
@@ -39,11 +62,11 @@
   html { scroll-behavior: smooth; }
 
   body {
-    background: var(--paper);
-    color: var(--ink-soft);
-    font-family: var(--serif);
-    font-size: 1.15rem;
-    line-height: 1.72;
+    background: var(--canvas);
+    color: var(--foreground);
+    font-family: var(--font-body);
+    font-size: 1.12rem;
+    line-height: 1.68;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
@@ -55,107 +78,115 @@
     padding: 0 1.5rem;
   }
   section { padding: var(--gap-section) 0; }
-  .band { background: var(--paper-dark); }
+  .band { background: var(--secondary-bg); }
   .band-ink {
-    background: var(--ink);
-    color: #e8e3d8;
+    background: var(--primary);
+    color: var(--primary-fg);
   }
 
   /* ---------- Tipografia ---------- */
   h1, h2, h3 {
-    font-family: var(--serif);
-    color: var(--ink);
-    line-height: 1.18;
+    font-family: var(--font-display);
+    color: var(--foreground);
+    line-height: 1.15;
     font-weight: 700;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
   }
   h2 {
-    font-size: 1.85rem;
+    font-size: 1.9rem;
     margin-bottom: 1.4rem;
   }
   h3 {
-    font-size: 1.2rem;
+    font-size: 1.18rem;
+    font-weight: 700;
     margin-bottom: .6rem;
-    color: var(--accent);
+    color: var(--foreground);
+    letter-spacing: -0.01em;
   }
   p { margin-bottom: 1.15rem; }
   p:last-child { margin-bottom: 0; }
-  strong { color: var(--ink); font-weight: 700; }
+  strong { color: var(--foreground); font-weight: 700; }
   em { font-style: italic; }
 
   .eyebrow {
-    font-family: var(--sans);
-    font-size: .75rem;
-    letter-spacing: .22em;
+    font-family: var(--font-mono);
+    font-size: .74rem;
+    letter-spacing: .18em;
     text-transform: uppercase;
-    color: var(--accent);
-    font-weight: 600;
+    color: var(--ring);
+    font-weight: 500;
     margin-bottom: 1.4rem;
     display: block;
   }
-  .band-ink .eyebrow { color: var(--ochre); }
+  .band-ink .eyebrow { color: var(--ring); }
 
-  /* filete decorativo acadêmico */
+  /* filete decorativo — acento terracota */
   .rule-mark {
-    width: 3rem;
+    width: 2.5rem;
     height: 2px;
-    background: var(--accent);
+    background: var(--ring);
+    border-radius: var(--radius-pill);
     margin: 0 0 1.6rem;
   }
   .rule-center { margin-left: auto; margin-right: auto; }
 
   /* ---------- Header / above the fold ---------- */
   .masthead {
-    border-bottom: 1px solid var(--rule);
-    background: var(--paper);
+    border-bottom: 1px solid var(--border);
+    background: var(--canvas);
+    position: sticky;
+    top: 0;
+    z-index: 10;
   }
   .masthead-inner {
     max-width: 62rem;
     margin: 0 auto;
-    padding: 1.1rem 1.5rem;
+    min-height: var(--nav-height);
+    padding: 0 1.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
   }
   .wordmark {
-    font-family: var(--serif);
+    font-family: var(--font-display);
     font-weight: 700;
     font-size: 1.05rem;
-    color: var(--ink);
-    letter-spacing: -0.01em;
+    color: var(--foreground);
+    letter-spacing: -0.02em;
   }
-  .wordmark span { color: var(--accent); }
+  .wordmark span { color: var(--ring); }
   .masthead-note {
-    font-family: var(--sans);
-    font-size: .72rem;
+    font-family: var(--font-mono);
+    font-size: .70rem;
     letter-spacing: .12em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--fg-muted);
   }
 
   .hero {
     padding: 5rem 0 4.2rem;
-    border-bottom: 1px solid var(--rule);
+    border-bottom: 1px solid var(--border);
   }
   .hero .wrap { max-width: 44rem; }
   .hero h1 {
     font-size: 2.55rem;
-    line-height: 1.16;
+    line-height: 1.12;
     margin-bottom: 1.6rem;
   }
   .hero .lede {
-    font-size: 1.28rem;
-    color: var(--ink-soft);
-    border-left: 3px solid var(--accent);
+    font-size: 1.26rem;
+    line-height: 1.5;
+    color: var(--foreground);
+    border-left: 3px solid var(--ring);
     padding-left: 1.2rem;
-    font-style: italic;
+    font-weight: 500;
   }
   .subhead {
-    font-family: var(--sans);
+    font-family: var(--font-body);
     font-size: 1.02rem;
     line-height: 1.6;
-    color: var(--muted);
+    color: var(--fg-muted);
     margin-top: 2rem;
     max-width: 38rem;
   }
@@ -166,63 +197,77 @@
     padding: 3.4rem 0;
   }
   .btn {
-    display: inline-block;
-    font-family: var(--sans);
-    font-size: 1.08rem;
-    font-weight: 600;
-    letter-spacing: .01em;
-    color: #fbf8f2;
-    background: var(--accent);
-    padding: 1.05rem 2.2rem;
-    border-radius: 3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--btn-height);
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    color: var(--primary-fg);
+    background: var(--primary);
+    padding: .85rem 2.1rem;
+    border-radius: var(--radius-button);
     text-decoration: none;
-    border: none;
+    border: 1px solid var(--primary);
     cursor: pointer;
-    transition: background .18s ease, transform .18s ease;
-    box-shadow: 0 2px 0 var(--accent-deep);
+    transition: background .18s ease, opacity .18s ease, box-shadow .18s ease;
   }
-  .btn:hover { background: var(--accent-deep); transform: translateY(-1px); }
+  .btn:hover { opacity: .90; }
+  .btn:active { opacity: .82; }
+  .btn:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
   .cta-sub {
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 1.1rem;
-    color: var(--muted);
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    color: var(--fg-muted);
     margin-top: 1.2rem;
   }
   .cta-note {
-    font-family: var(--sans);
-    font-size: .82rem;
-    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: .78rem;
+    letter-spacing: .04em;
+    color: var(--fg-muted);
     margin-top: .9rem;
-    letter-spacing: .02em;
+  }
+
+  /* links focáveis genéricos */
+  a:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+    border-radius: 2px;
   }
 
   /* ---------- Listas de conteúdo ---------- */
   .parts { list-style: none; margin-top: .5rem; }
   .parts li {
     padding: 1.3rem 0;
-    border-bottom: 1px solid var(--rule);
+    border-bottom: 1px solid var(--border);
   }
   .parts li:last-child { border-bottom: none; }
   .parts .part-label {
-    font-family: var(--sans);
+    font-family: var(--font-mono);
     font-size: .72rem;
-    letter-spacing: .16em;
+    letter-spacing: .12em;
     text-transform: uppercase;
-    color: var(--ochre);
-    font-weight: 600;
-    display: block;
-    margin-bottom: .35rem;
-  }
-  .parts .part-title {
-    font-family: var(--serif);
-    font-weight: 700;
-    color: var(--ink);
-    font-size: 1.15rem;
+    color: var(--ring);
+    font-weight: 500;
     display: block;
     margin-bottom: .4rem;
   }
-  .parts p { font-size: 1.02rem; margin-bottom: 0; color: var(--ink-soft); }
+  .parts .part-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--foreground);
+    font-size: 1.16rem;
+    letter-spacing: -0.01em;
+    display: block;
+    margin-bottom: .4rem;
+  }
+  .parts p { font-size: 1.0rem; margin-bottom: 0; color: var(--fg-muted); }
 
   /* ---------- Colunas para-quem / não-é ---------- */
   .audience {
@@ -236,115 +281,116 @@
     position: relative;
     padding-left: 1.6rem;
     margin-bottom: .85rem;
-    font-size: 1.02rem;
+    font-size: 1.0rem;
     line-height: 1.55;
   }
   .audience .is li::before {
     content: "—";
     position: absolute;
     left: 0;
-    color: var(--accent);
+    color: var(--ring);
     font-weight: 700;
   }
   .audience .isnot li::before {
     content: "×";
     position: absolute;
     left: 0;
-    color: var(--muted);
+    color: var(--fg-muted);
     font-weight: 700;
   }
-  .audience .isnot h3 { color: var(--muted); }
+  .audience .isnot h3 { color: var(--fg-muted); }
 
-  /* ---------- Ética (bloco destaque) ---------- */
+  /* ---------- Ética (bloco destaque — acento editorial serif) ---------- */
   .ethics blockquote {
-    font-family: var(--serif);
+    font-family: var(--font-serif);
     font-size: 1.3rem;
     font-style: italic;
     line-height: 1.5;
-    color: var(--ink);
-    border-left: 3px solid var(--ochre);
+    color: var(--foreground);
+    border-left: 3px solid var(--ring);
     padding: .2rem 0 .2rem 1.3rem;
     margin: 1.6rem 0;
   }
 
   /* ---------- Preço ---------- */
   .price-card {
-    background: var(--paper-card);
-    border: 1px solid var(--rule);
-    border-radius: 4px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
     padding: 2.6rem 2rem;
     text-align: center;
     max-width: 34rem;
     margin: 0 auto;
-    box-shadow: 0 1px 0 rgba(0,0,0,.03);
   }
   .price-amount {
-    font-family: var(--serif);
+    font-family: var(--font-display);
     font-size: 3.2rem;
     font-weight: 700;
-    color: var(--ink);
+    color: var(--foreground);
     line-height: 1;
+    letter-spacing: -0.03em;
   }
   .price-amount span {
-    font-size: 1.2rem;
-    color: var(--muted);
+    font-size: 1.15rem;
+    color: var(--fg-muted);
     vertical-align: super;
+    font-weight: 500;
   }
-  .price-card p { font-size: 1.02rem; color: var(--ink-soft); }
-  .price-card .fine { color: var(--muted); font-size: .95rem; }
+  .price-card p { font-size: 1.0rem; color: var(--foreground); }
+  .price-card .fine { color: var(--fg-muted); font-size: .94rem; }
 
   .guarantee {
     max-width: 34rem;
     margin: 2rem auto 0;
-    border: 1px dashed var(--rule);
-    border-radius: 4px;
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-card);
     padding: 1.6rem 1.8rem;
     background: transparent;
   }
   .guarantee h3 { font-size: 1.05rem; margin-bottom: .5rem; }
-  .guarantee p { font-size: .98rem; margin-bottom: .6rem; }
+  .guarantee p { font-size: .97rem; margin-bottom: .6rem; color: var(--fg-muted); }
 
   /* ---------- Frase de assinatura ---------- */
   .signature {
     text-align: center;
-    padding: 3rem 0;
+    padding: 3.4rem 0;
   }
   .signature blockquote {
-    font-family: var(--serif);
+    font-family: var(--font-serif);
     font-style: italic;
     font-size: 1.35rem;
     line-height: 1.5;
-    color: #e8e3d8;
+    color: var(--primary-fg);
     max-width: 40rem;
     margin: 0 auto;
   }
   .signature cite {
     display: block;
     font-style: normal;
-    font-family: var(--sans);
-    font-size: .82rem;
-    letter-spacing: .14em;
+    font-family: var(--font-mono);
+    font-size: .76rem;
+    letter-spacing: .12em;
     text-transform: uppercase;
-    color: var(--ochre);
+    color: var(--ring);
     margin-top: 1.4rem;
   }
 
   /* ---------- Footer ---------- */
   footer {
-    border-top: 1px solid var(--rule);
+    border-top: 1px solid var(--border);
     padding: 2.4rem 0;
     text-align: center;
   }
   footer p {
-    font-family: var(--sans);
+    font-family: var(--font-body);
     font-size: .82rem;
-    color: var(--muted);
-    letter-spacing: .02em;
+    color: var(--fg-muted);
+    letter-spacing: .01em;
   }
 
   /* ---------- Responsivo ---------- */
   @media (max-width: 640px) {
-    body { font-size: 1.08rem; }
+    body { font-size: 1.05rem; }
     .hero h1 { font-size: 1.95rem; }
     .hero .lede { font-size: 1.12rem; }
     h2 { font-size: 1.5rem; }
@@ -353,6 +399,12 @@
     .price-amount { font-size: 2.6rem; }
     .masthead-note { display: none; }
     :root { --gap-section: 3.4rem; }
+  }
+
+  /* ---------- Motion reduzido ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; animation: none !important; }
   }
 </style>
 </head>
