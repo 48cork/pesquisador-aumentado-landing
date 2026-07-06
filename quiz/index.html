@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quiz - Pesquisador Aumentado</title>
+  <meta name="description" content="Descubra qual trava mais pesa hoje nas suas orientacoes de TCC.">
+
+  <!-- Meta Pixel pronto para Aula 3:
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+    (window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '[PLUG: SEU_PIXEL_ID]');
+    fbq('track', 'PageView');
+  </script>
+  -->
+
+  <!-- GTM pronto para Aula 3:
+  <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','[PLUG: GTM-XXXXXXX]');
+  </script>
+  -->
+
+  <style>
+    :root {
+      --canvas: #faf9f5;
+      --surface: #ffffff;
+      --ink: #141413;
+      --muted: #5d5a52;
+      --line: #dfdbd0;
+      --accent: #d97757;
+      --accent-soft: #f4dfd3;
+      --primary: #141413;
+      --primary-fg: #faf9f5;
+      --good: #246b49;
+      --radius-card: 8px;
+      --radius-button: 4px;
+      --shadow: 0 18px 40px rgba(20, 20, 19, 0.08);
+      --font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-display: Georgia, "Times New Roman", serif;
+      --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: var(--font-body);
+      line-height: 1.55;
+    }
+
+    .wrap {
+      width: min(980px, calc(100% - 32px));
+      min-height: 100vh;
+      margin: 0 auto;
+      display: grid;
+      align-items: center;
+      padding: 40px 0;
+    }
+
+    .app {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-card);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(250, 249, 245, 0.78);
+    }
+
+    .brand {
+      font-family: var(--font-display);
+      font-size: 1.12rem;
+      font-weight: 700;
+    }
+
+    .brand span { color: var(--accent); }
+
+    .step {
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+    }
+
+    .bar {
+      height: 7px;
+      background: var(--line);
+    }
+
+    .bar span {
+      display: block;
+      width: 0%;
+      height: 100%;
+      background: var(--accent);
+      transition: width .25s ease;
+    }
+
+    .panel {
+      padding: clamp(24px, 5vw, 54px);
+    }
+
+    .eyebrow {
+      margin: 0 0 18px;
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    h1, h2 {
+      margin: 0;
+      font-family: var(--font-display);
+      letter-spacing: 0;
+      line-height: 1.05;
+    }
+
+    h1 { font-size: clamp(2.55rem, 6vw, 5rem); }
+    h2 { font-size: clamp(2rem, 4vw, 3.55rem); }
+
+    p {
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 1.04rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    button, .btn {
+      min-height: 48px;
+      border: 1px solid var(--primary);
+      border-radius: var(--radius-button);
+      background: var(--primary);
+      color: var(--primary-fg);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 13px 18px;
+      font: inherit;
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    button.secondary, .btn.secondary {
+      background: transparent;
+      color: var(--ink);
+    }
+
+    button:focus-visible,
+    .btn:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .choices {
+      display: grid;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .choice {
+      width: 100%;
+      min-height: 64px;
+      justify-content: flex-start;
+      border-color: var(--line);
+      background: var(--canvas);
+      color: var(--ink);
+      text-align: left;
+      font-weight: 650;
+    }
+
+    .choice:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .gate {
+      display: grid;
+      gap: 14px;
+      max-width: 560px;
+      margin-top: 28px;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    input {
+      min-height: 48px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-button);
+      background: var(--canvas);
+      color: var(--ink);
+      padding: 12px 13px;
+      font: inherit;
+    }
+
+    .result-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-card);
+      background: var(--canvas);
+      padding: 22px;
+      margin-top: 24px;
+    }
+
+    .tag {
+      display: inline-flex;
+      width: fit-content;
+      border: 1px solid var(--accent);
+      border-radius: 999px;
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 6px 10px;
+      text-transform: uppercase;
+    }
+
+    .route {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .route div {
+      border-left: 3px solid var(--accent);
+      padding-left: 14px;
+    }
+
+    .hidden { display: none; }
+
+    @media (max-width: 720px) {
+      .top {
+        flex-direction: column;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+
+      button, .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- GTM noscript pronto para Aula 3:
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=[PLUG: GTM-XXXXXXX]"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  -->
+
+  <main class="wrap">
+    <div class="app">
+      <div class="top">
+        <div class="brand">Pesquisador <span>Aumentado</span></div>
+        <div class="step" id="stepLabel">Diagnostico de orientacao</div>
+      </div>
+      <div class="bar" aria-hidden="true"><span id="bar"></span></div>
+      <section class="panel" id="screen"></section>
+    </div>
+  </main>
+
+  <script>
+    const questions = [
+      {
+        title: "O que mais aparece nas suas orientacoes hoje?",
+        options: [
+          ["O mesmo capitulo volta com o mesmo erro, so que reescrito.", "ciclo"],
+          ["O aluno chega com texto que parece produtivo, mas nao sustenta argumento.", "autonomia"],
+          ["Eu nao sei qual roteiro seguir antes da sessao.", "metodo"],
+          ["Tenho receio de a IA aumentar a simulacao de autoria.", "ia"],
+          ["O retrabalho esta tomando horas que deveriam ir para pesquisa.", "roi"]
+        ]
+      },
+      {
+        title: "Quando voce pensa em usar IA na orientacao, qual preocupacao pesa mais?",
+        options: [
+          ["Que o aluno use IA para escrever sem pensar.", "ia"],
+          ["Que eu vire corretor de texto com uma ferramenta a mais.", "ciclo"],
+          ["Que falte um protocolo defensavel para usar isso com rigor.", "metodo"],
+          ["Que a ferramenta nao reduza o tempo perdido na pratica.", "roi"],
+          ["Que o aluno continue dependente de resposta pronta.", "autonomia"]
+        ]
+      },
+      {
+        title: "Antes de uma sessao de TCC, o que costuma faltar?",
+        options: [
+          ["Um roteiro claro de perguntas.", "metodo"],
+          ["Uma forma de tirar o aluno da reescrita mecanica.", "ciclo"],
+          ["Uma maneira de fazer o aluno defender suas escolhas.", "autonomia"],
+          ["Um uso de IA que nao pareca atalho antiacademico.", "ia"],
+          ["Tempo para preparar a orientacao com calma.", "roi"]
+        ]
+      },
+      {
+        title: "Qual custo invisivel da orientacao mais incomoda?",
+        options: [
+          ["Horas corrigindo o que nao vira artigo, aula ou pesquisa.", "roi"],
+          ["A sensacao de corrigir texto sem formar pensamento.", "ciclo"],
+          ["A falta de metodo institucional para orientar pesquisa.", "metodo"],
+          ["O risco de a IA confundir autoria com produtividade.", "ia"],
+          ["A dependencia intelectual do aluno em cada decisao.", "autonomia"]
+        ]
+      },
+      {
+        title: "Quando o aluno recebe feedback, o que acontece com mais frequencia?",
+        options: [
+          ["Ele reescreve, mas nao entende o principio.", "ciclo"],
+          ["Ele espera que eu diga qual e a resposta certa.", "autonomia"],
+          ["Eu improviso a conducao da conversa.", "metodo"],
+          ["Eu evito IA porque nao quero abrir uma porta errada.", "ia"],
+          ["Eu perco mais uma rodada de trabalho sem ganho proporcional.", "roi"]
+        ]
+      },
+      {
+        title: "O que voce mais gostaria de mudar na proxima orientacao?",
+        options: [
+          ["Entrar com 5 a 7 perguntas calibradas.", "metodo"],
+          ["Fazer o aluno pensar antes de reescrever.", "autonomia"],
+          ["Parar a quarta versao do mesmo erro.", "ciclo"],
+          ["Usar IA do meu lado, com criterio academico.", "ia"],
+          ["Recuperar tempo sem afrouxar o rigor.", "roi"]
+        ]
+      }
+    ];
+
+    const results = {
+      ciclo: {
+        name: "Ciclo corretivo",
+        label: "Funil de dor e virada socratica",
+        mirror: "Sua orientacao esta presa em rodadas de correcao. O texto muda, mas o raciocinio que gerou o problema continua quase no mesmo lugar.",
+        pain: "A trava central e corrigir produto sem alterar processo. O aluno aprende a remendar o capitulo, mas nao a explicar a decisao intelectual por tras dele.",
+        bridge: "O proximo funil mostra como trocar a correcao por perguntas que obrigam o aluno a defender, conectar e descobrir a lacuna.",
+        cta: "Quero sair do ciclo corretivo"
+      },
+      ia: {
+        name: "Medo da IA",
+        label: "Funil etico",
+        mirror: "Sua resistencia nao e tecnologica. Ela vem de um cuidado legitimo com autoria, rigor e formacao intelectual.",
+        pain: "A trava central e imaginar a IA do lado do aluno, produzindo texto e simulando produtividade.",
+        bridge: "O proximo funil desloca a IA para o lado do professor: ela prepara perguntas, enquanto o aluno responde, argumenta e pensa.",
+        cta: "Quero usar IA com criterio academico"
+      },
+      metodo: {
+        name: "Falta de metodo de orientacao",
+        label: "Funil do metodo socratico aplicado",
+        mirror: "Voce sabe pesquisar, mas nem sempre recebeu um metodo claro para ensinar outra pessoa a pesquisar.",
+        pain: "A trava central e entrar na sessao dependendo de improviso, experiencia acumulada e boa vontade do aluno.",
+        bridge: "O proximo funil apresenta um roteiro socratico de 5 a 7 perguntas por bloqueio de orientacao.",
+        cta: "Quero aplicar o metodo na proxima orientacao"
+      },
+      roi: {
+        name: "Sobrecarga invisivel",
+        label: "Funil de ROI academico",
+        mirror: "A orientacao esta consumindo horas que raramente aparecem como trabalho reconhecido.",
+        pain: "A trava central e o retrabalho: cada rodada corretiva custa tempo de pesquisa, escrita, aula e vida intelectual.",
+        bridge: "O proximo funil mostra o custo das rodadas corretivas e posiciona o metodo como uma forma de recuperar tempo sem baixar o rigor.",
+        cta: "Quero recuperar minhas reunioes de orientacao"
+      },
+      autonomia: {
+        name: "Aluno sem autonomia",
+        label: "Funil de autonomia intelectual",
+        mirror: "Seu maior incômodo e ver o aluno depender demais da sua leitura para formular problema, metodo e argumento.",
+        pain: "A trava central e que o aluno reescreve, mas ainda nao sustenta o proprio raciocinio.",
+        bridge: "O proximo funil entrega a isca das 7 perguntas e leva o aluno, pela orientacao do professor, a explicar antes de reescrever.",
+        cta: "Quero formar autonomia intelectual"
+      }
+    };
+
+    let index = -1;
+    const scores = { ciclo: 0, ia: 0, metodo: 0, roi: 0, autonomia: 0 };
+    let lead = { name: "", email: "" };
+
+    const screen = document.getElementById("screen");
+    const bar = document.getElementById("bar");
+    const stepLabel = document.getElementById("stepLabel");
+
+    function eventTrack(name, detail) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: name, detail: detail || {} });
+      if (window.fbq) window.fbq("trackCustom", name, detail || {});
+    }
+
+    function setProgress(value) {
+      bar.style.width = value + "%";
+    }
+
+    function start() {
+      index = 0;
+      setProgress(8);
+      eventTrack("quiz_start");
+      renderQuestion();
+    }
+
+    function renderIntro() {
+      stepLabel.textContent = "Diagnostico de orientacao";
+      setProgress(0);
+      screen.innerHTML = `
+        <p class="eyebrow">Quiz de 90 segundos</p>
+        <h1>Qual trava mais pesa hoje nas suas orientacoes de TCC?</h1>
+        <p>Responda 6 perguntas e veja qual funil corresponde ao seu momento: ciclo corretivo, etica da IA, metodo socratico, ROI academico ou autonomia intelectual.</p>
+        <div class="actions">
+          <button onclick="start()">Comecar diagnostico</button>
+          <a class="btn secondary" href="index.html">Ver pagina de vendas</a>
+        </div>
+      `;
+    }
+
+    function renderQuestion() {
+      const q = questions[index];
+      stepLabel.textContent = `Pergunta ${index + 1} de ${questions.length}`;
+      setProgress(Math.round(((index + 1) / (questions.length + 1)) * 100));
+      screen.innerHTML = `
+        <p class="eyebrow">Diagnostico em andamento</p>
+        <h2>${q.title}</h2>
+        <div class="choices">
+          ${q.options.map(([text, key]) => `<button class="choice" onclick="answer('${key}')">${text}</button>`).join("")}
+        </div>
+      `;
+    }
+
+    function answer(key) {
+      scores[key] += 1;
+      index += 1;
+      if (index >= questions.length) {
+        renderGate();
+      } else {
+        renderQuestion();
+      }
+    }
+
+    function winningKey() {
+      const order = ["ciclo", "ia", "metodo", "roi", "autonomia"];
+      return order.sort((a, b) => scores[b] - scores[a])[0];
+    }
+
+    function renderGate() {
+      stepLabel.textContent = "Revelar resultado";
+      setProgress(92);
+      screen.innerHTML = `
+        <p class="eyebrow">Seu diagnostico esta pronto</p>
+        <h2>Deixe seu nome e e-mail para ver o funil correspondente.</h2>
+        <p>Seu contato fica registrado junto com a tag do resultado. E isso que permite enviar uma sequencia de follow-up coerente com a sua trava.</p>
+        <form class="gate" onsubmit="submitLead(event)">
+          <label>Nome
+            <input id="leadName" required autocomplete="name" placeholder="Seu nome">
+          </label>
+          <label>E-mail
+            <input id="leadEmail" required type="email" autocomplete="email" placeholder="voce@email.com">
+          </label>
+          <button type="submit">Ver meu diagnostico</button>
+        </form>
+      `;
+    }
+
+    function submitLead(event) {
+      event.preventDefault();
+      lead.name = document.getElementById("leadName").value.trim();
+      lead.email = document.getElementById("leadEmail").value.trim();
+      const key = winningKey();
+
+      // Integracao futura com CRM/email:
+      // fetch("[PLUG: WEBHOOK_CRM]", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ name: lead.name, email: lead.email, tag: key, scores })
+      // });
+
+      eventTrack("Lead", { tag: key, email: lead.email });
+      eventTrack("quiz_complete", { tag: key });
+      renderResult(key);
+    }
+
+    function renderResult(key) {
+      const r = results[key];
+      stepLabel.textContent = "Resultado";
+      setProgress(100);
+      screen.innerHTML = `
+        <p class="eyebrow">Seu resultado</p>
+        <h2>${lead.name ? lead.name + ", seu diagnostico e: " : "Seu diagnostico e: "} ${r.name}</h2>
+        <div class="result-card">
+          <span class="tag">${r.label}</span>
+          <p>${r.mirror}</p>
+          <div class="route">
+            <div><strong>Dor central</strong><br>${r.pain}</div>
+            <div><strong>Ponte para o funil</strong><br>${r.bridge}</div>
+            <div><strong>Oferta casada</strong><br>Pesquisador Aumentado, com a pagina e os e-mails ajustados para este diagnostico.</div>
+          </div>
+        </div>
+        <div class="actions">
+          <a class="btn" href="index.html" onclick="eventTrack('clique_cta_revelacao', {tag: '${key}'})">${r.cta}</a>
+          <button class="secondary" onclick="restart()">Refazer o quiz</button>
+        </div>
+      `;
+    }
+
+    function restart() {
+      index = -1;
+      Object.keys(scores).forEach(key => scores[key] = 0);
+      lead = { name: "", email: "" };
+      renderIntro();
+    }
+
+    renderIntro();
+  </script>
+</body>
+</html>
+
