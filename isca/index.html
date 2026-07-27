@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>As 7 Perguntas Socráticas — Pesquisador Aumentado™</title>
+<meta name="description" content="Baixe gratuitamente as 7 Perguntas Socráticas que todo orientador deveria fazer antes de qualquer sessão de TCC. Isca digital do Pesquisador Aumentado™.">
+<style>
+  /* ============================================================
+     DESIGN TOKENS — Pesquisador Aumentado (mesmos tokens de index.html)
+     ============================================================ */
+  :root {
+    --canvas:        #faf9f5;
+    --card:          #ffffff;
+    --secondary-bg:  #f0eee6;
+
+    --primary:       #141413;
+    --primary-fg:    #faf9f5;
+    --foreground:    #141413;
+    --fg-muted:      #5e5d59;
+
+    --border:        rgba(20,20,19,0.10);
+    --border-strong: rgba(20,20,19,0.18);
+    --ring:          #d97757;
+    --destructive:   #C6613F;
+
+    --state-hover:   rgba(0,0,0,0.08);
+
+    --font-display: system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --font-body:    system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --font-mono:    ui-monospace, "SF Mono", "Roboto Mono", "JetBrains Mono", "Consolas", monospace;
+    --font-serif:   "Iowan Old Style", "Palatino Linotype", Georgia, "Times New Roman", serif;
+
+    --radius-button: 4px;
+    --radius-input:  4px;
+    --radius-card:   8px;
+    --radius-pill:   9999px;
+
+    --btn-height:  2.5rem;
+    --nav-height:  64px;
+
+    --measure: 34rem;
+    --gap-section: 4.5rem;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--canvas);
+    color: var(--foreground);
+    font-family: var(--font-body);
+    font-size: 1.12rem;
+    line-height: 1.68;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .wrap { max-width: var(--measure); margin: 0 auto; padding: 0 1.5rem; }
+  section { padding: var(--gap-section) 0; }
+  .band { background: var(--secondary-bg); }
+
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    color: var(--foreground);
+    line-height: 1.15;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  h3 { font-size: 1.18rem; margin-bottom: .6rem; letter-spacing: -0.01em; }
+  p { margin-bottom: 1.15rem; }
+  p:last-child { margin-bottom: 0; }
+  strong { color: var(--foreground); font-weight: 700; }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: .74rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ring);
+    font-weight: 500;
+    margin-bottom: 1.4rem;
+    display: block;
+  }
+
+  .rule-mark {
+    width: 2.5rem;
+    height: 2px;
+    background: var(--ring);
+    border-radius: var(--radius-pill);
+    margin: 0 0 1.6rem;
+  }
+
+  /* ---------- Masthead ---------- */
+  .masthead {
+    border-bottom: 1px solid var(--border);
+    background: var(--canvas);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .masthead-inner {
+    max-width: 62rem;
+    margin: 0 auto;
+    min-height: var(--nav-height);
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .wordmark {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--foreground);
+    letter-spacing: -0.02em;
+  }
+  .wordmark span { color: var(--ring); }
+  .masthead-note {
+    font-family: var(--font-mono);
+    font-size: .70rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+
+  /* ---------- Hero ---------- */
+  .hero { padding: 5rem 0 3.2rem; border-bottom: 1px solid var(--border); }
+  .hero .wrap { max-width: 44rem; }
+  .hero h1 { font-size: 2.3rem; line-height: 1.16; margin-bottom: 1.4rem; }
+  .hero .lede {
+    font-size: 1.2rem;
+    line-height: 1.5;
+    color: var(--foreground);
+    border-left: 3px solid var(--ring);
+    padding-left: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 1.4rem;
+  }
+  .subhead { font-size: 1.02rem; line-height: 1.6; color: var(--fg-muted); max-width: 38rem; }
+
+  /* ---------- Lista dos 4 tipos ---------- */
+  .parts { list-style: none; margin-top: .5rem; }
+  .parts li { padding: 1.1rem 0; border-bottom: 1px solid var(--border); }
+  .parts li:last-child { border-bottom: none; }
+  .parts .part-label {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ring);
+    font-weight: 500;
+    display: block;
+    margin-bottom: .3rem;
+  }
+  .parts .part-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--foreground);
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+    display: block;
+  }
+
+  /* ---------- Formulário de captura ---------- */
+  .gate-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    padding: 2.2rem 2rem;
+    max-width: 30rem;
+  }
+  .gate { display: grid; gap: 14px; margin-top: 1.4rem; }
+  .gate label {
+    display: grid;
+    gap: 6px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: .95rem;
+    color: var(--foreground);
+  }
+  .gate input {
+    min-height: 48px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-input);
+    background: var(--canvas);
+    color: var(--foreground);
+    padding: 12px 13px;
+    font: inherit;
+  }
+  .gate input:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--btn-height);
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--primary-fg);
+    background: var(--primary);
+    padding: .85rem 2.1rem;
+    border-radius: var(--radius-button);
+    text-decoration: none;
+    border: 1px solid var(--primary);
+    cursor: pointer;
+    transition: opacity .18s ease;
+  }
+  .btn:hover { opacity: .90; }
+  .btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
+  .cta-note {
+    font-family: var(--font-mono);
+    font-size: .78rem;
+    letter-spacing: .04em;
+    color: var(--fg-muted);
+    margin-top: .9rem;
+  }
+
+  .hidden { display: none; }
+
+  .thanks-card {
+    background: var(--primary);
+    color: var(--primary-fg);
+    border-radius: var(--radius-card);
+    padding: 2.2rem 2rem;
+    max-width: 30rem;
+  }
+  .thanks-card h3 { color: var(--primary-fg); }
+  .thanks-card .btn { background: var(--primary-fg); color: var(--primary); border-color: var(--primary-fg); }
+  .thanks-card .btn:hover { opacity: .88; }
+
+  footer { border-top: 1px solid var(--border); padding: 2.4rem 0; }
+  footer .wrap { max-width: 44rem; }
+  footer p { font-size: .92rem; color: var(--fg-muted); margin-bottom: 0; }
+
+  a:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; border-radius: 2px; }
+
+  @media (max-width: 640px) {
+    .hero { padding: 3.4rem 0 2.4rem; }
+    .hero h1 { font-size: 1.85rem; }
+    :root { --gap-section: 3rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============ MASTHEAD ============ -->
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="wordmark">Pesquisador Aumentado<span>™</span></div>
+      <div class="masthead-note">Isca digital · Método socrático</div>
+    </div>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow">Isca digital gratuita</span>
+      <h1>As 7 Perguntas Socráticas que Todo Orientador Deveria Fazer Antes de Qualquer Sessão de TCC</h1>
+      <p class="lede">Corrigir o texto que o aluno traz ensina ele a reescrever. Perguntar antes ensina ele a pensar.</p>
+      <p class="subhead">As 7 perguntas deste guia vêm de 4 tipos de pergunta socrática (origem, premissa, justificativa metodológica, originalidade) e servem para qualquer fase do TCC, do problema de pesquisa à defesa na banca.</p>
+    </div>
+  </section>
+
+  <!-- ============ O QUE VEM NO PDF ============ -->
+  <section>
+    <div class="wrap">
+      <span class="eyebrow">O que vem no PDF</span>
+      <div class="rule-mark"></div>
+      <ul class="parts">
+        <li>
+          <span class="part-label">Tipo 1</span>
+          <span class="part-title">Perguntas de origem</span>
+        </li>
+        <li>
+          <span class="part-label">Tipo 2</span>
+          <span class="part-title">Perguntas de premissa</span>
+        </li>
+        <li>
+          <span class="part-label">Tipo 3</span>
+          <span class="part-title">Perguntas de justificativa metodológica</span>
+        </li>
+        <li>
+          <span class="part-label">Tipo 4</span>
+          <span class="part-title">Pergunta de originalidade</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ CAPTURA ============ -->
+  <section class="band">
+    <div class="wrap">
+      <span class="eyebrow">Baixe agora, sem custo</span>
+      <div class="rule-mark"></div>
+
+      <div class="gate-card" id="gateCard">
+        <h3>Receba o PDF de 1 página</h3>
+        <p style="color:var(--fg-muted);margin-bottom:0;">Preencha para liberar o download.</p>
+        <form class="gate" id="leadForm" onsubmit="submitLead(event)">
+          <label>Nome
+            <input id="leadName" required autocomplete="name" placeholder="Seu nome">
+          </label>
+          <label>E-mail
+            <input id="leadEmail" required type="email" autocomplete="email" placeholder="voce@email.com">
+          </label>
+          <button type="submit" class="btn">Baixar as 7 perguntas</button>
+        </form>
+      </div>
+
+      <div class="thanks-card hidden" id="thanksCard">
+        <h3>Pronto, {{nome}}.</h3>
+        <p>Seu PDF está liberado abaixo.</p>
+        <a class="btn" id="downloadBtn" href="As-7-Perguntas-Socraticas-Pesquisador-Aumentado.pdf" download>Baixar o PDF agora</a>
+        <p class="cta-note" style="color:var(--primary-fg);opacity:.7;">Nos próximos dias você recebe mais conteúdo sobre o método socrático com IA.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ASSINATURA ============ -->
+  <section>
+    <div class="wrap" style="max-width:38rem;">
+      <p style="font-family:var(--font-serif);font-size:1.1rem;font-style:italic;color:var(--foreground);border-left:3px solid var(--ring);padding-left:1.2rem;">
+        Nenhuma dessas perguntas corrige o texto do aluno. Todas fazem ele pensar antes de escrever de novo.
+      </p>
+      <p style="margin-top:1rem;color:var(--fg-muted);">Prof. Dr. Sergio Rolemberg Farias</p>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="wrap">
+      <p>Pesquisador Aumentado™ — Metodologia aplicada para orientadores de TCC. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <script>
+    function eventTrack(name, detail) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: name, detail: detail || {} });
+      if (window.fbq) window.fbq("trackCustom", name, detail || {});
+    }
+
+    function submitLead(event) {
+      event.preventDefault();
+      var name = document.getElementById("leadName").value.trim();
+      var email = document.getElementById("leadEmail").value.trim();
+
+      // Integracao futura com CRM/email:
+      // fetch("[PLUG: WEBHOOK_CRM]", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ name: name, email: email, source: "isca-7-perguntas" })
+      // });
+
+      eventTrack("Lead", { source: "isca-7-perguntas", email: email });
+      eventTrack("isca_download", { email: email });
+
+      document.getElementById("thanksCard").querySelector("h3").textContent = "Pronto, " + name.split(" ")[0] + ".";
+      document.getElementById("gateCard").classList.add("hidden");
+      document.getElementById("thanksCard").classList.remove("hidden");
+    }
+  </script>
+
+</body>
+</html>
